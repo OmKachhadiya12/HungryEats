@@ -41,7 +41,7 @@ export const isAuth = async (req:AuthenticatedRequest,res:Response,next:NextFunc
         
     } catch (error: any) {
 
-        res.status(500).json({
+        res.status(401).json({
             message: error.message
         })
         

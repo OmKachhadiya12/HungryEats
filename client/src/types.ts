@@ -21,9 +21,9 @@ export interface AppContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  // location: LocationData | null;
-  // loadingLocation: boolean;
-  // city: string;
+  location: LocationData | null;
+  loadingLocation: boolean;
+  city: string;
   // cart: ICart[] | null;
   // fetchCart: () => Promise<void>;
   // subTotal: number;

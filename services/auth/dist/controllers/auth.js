@@ -6,7 +6,7 @@ import axios from "axios";
 const loginUser = TryCatch(async (req, res) => {
     const { code } = req.body;
     if (!code) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "Authorizatoin code is required.",
         });
     }
