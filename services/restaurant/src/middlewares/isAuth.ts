@@ -54,3 +54,24 @@ export const isAuth = async (req:AuthenticatedRequest,res:Response,next:NextFunc
         
     }
 }
+
+export const isSeller = async (req:AuthenticatedRequest,res:Response,next:NextFunction): Promise<void> => {
+    try {
+
+        const user = req.user;
+
+        if(user && user.role !== "seller") {
+            res.status(401).json({message: "You are not authorized to be a seller. "})
+            return;
+        }
+
+        next();
+        
+    } catch (error: any) {
+
+        res.status(401).json({
+            message: error.message
+        })
+        
+    }
+}
