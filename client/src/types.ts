@@ -29,3 +29,22 @@ export interface AppContextType {
   // subTotal: number;
   // quauntity: number;
 }
+
+export interface IRestaurant {
+  _id: string
+  name: string;
+  image: string;
+  ownerId: string;
+  description?: string;
+  phone: number;
+  isVerified: boolean
+
+  autoLocation:{
+      type: "Point";
+      coordinates: [number,number];
+      formattedAddress: string;
+  };
+
+  isOpen: boolean;
+  createdAt: Date;
+}

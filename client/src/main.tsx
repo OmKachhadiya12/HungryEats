@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AppProvider } from './context/AppContext.tsx';
 
 export const authService = "http://localhost:1212";
+export const restaurantService = "http://localhost:1213";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

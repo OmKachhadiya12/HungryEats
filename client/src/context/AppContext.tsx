@@ -40,7 +40,7 @@ export const AppProvider = ({children}: AppProviderProps) => {
         },
       });
 
-      setUser(data);
+      setUser(data.user);
       setIsAuth(true);
     } catch (error) {
       console.log(error);
@@ -89,7 +89,14 @@ export const AppProvider = ({children}: AppProviderProps) => {
         setCity("Faild to load");
         setLoadingLocation(false);
       }
-    });
+    },
+    (error: GeolocationPositionError) => {
+
+        console.error(error);
+        alert("Location permission denied or location unavailable.");
+        setLoadingLocation(false);
+      }
+  );
   }, []);
 
   return (

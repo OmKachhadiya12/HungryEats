@@ -43,7 +43,7 @@ const loginUser = TryCatch(async (req,res) => {
     });
 })
 
-const allowedRoles = ["customer","user","driver"] as const;
+const allowedRoles = ["customer","seller","driver"] as const;
 type Role = (typeof allowedRoles)[number];
 
 const addUserRole = TryCatch(async (req:AuthenticatedRequest,res) => {
@@ -56,7 +56,7 @@ const addUserRole = TryCatch(async (req:AuthenticatedRequest,res) => {
     const {role} = req.body as {role: Role};
 
     if(!allowedRoles.includes(role)) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "Invalid Role",
         });
     }
