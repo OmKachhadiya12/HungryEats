@@ -80,4 +80,29 @@ const fetchMyrestaurant = TryCatch(async (req, res) => {
     }
     res.json({ restaurant });
 });
-export { addRestaurant, fetchMyrestaurant };
+const updateStatusRestaurant = TryCatch(async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({
+            message: "Please login."
+        });
+    }
+    const { status } = req.body;
+    if (typeof status !== "boolean") {
+        return res.status(400).json({
+            message: "Status must be boolean",
+        });
+    }
+    const restaurant = await Restaurant.findOneAndUpdate({ ownerId: req.user._id }, { isOpen: status }, { new: true });
+    if (!restaurant) {
+        return res.status(404).json({
+            message: "Restaurant not found",
+        });
+    }
+    res.json({
+        message: "Restaurant status Updated",
+        restaurant,
+    });
+});
+const updateReastaurant = TryCatch(async (req, res) => {
+});
+export { addRestaurant, fetchMyrestaurant, updateStatusRestaurant };
