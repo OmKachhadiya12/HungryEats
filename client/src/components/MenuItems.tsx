@@ -3,7 +3,7 @@ import type { IMenuItem } from "../types";
 import { FiEyeOff } from "react-icons/fi";
 import { BsCartPlus, BsEye } from "react-icons/bs";
 import { BiTrash } from "react-icons/bi";
-// import { VscLoading } from "react-icons/vsc";
+import { VscLoading } from "react-icons/vsc";
 import axios from "axios";
 import { restaurantService } from "../main";
 import toast from "react-hot-toast";
@@ -120,10 +120,10 @@ const MenuItem = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
                   </div>
                 )}
 
-                {/* {!isSeller && (
+                {!isSeller && (
                   <button
                     disabled={!item.isAvailable || isLoading}
-                    onClick={() => addToCart(item.restaurantId, item._id)}
+                    // onClick={() => addToCart(item.restaurantId, item._id)}
                     className={`flex items-center justify-center rounded-lg p-2 ${
                       !item.isAvailable || isLoading
                         ? "cursor-not-allowed text-gray-400"
@@ -136,7 +136,7 @@ const MenuItem = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
                       <BsCartPlus size={18} />
                     )}
                   </button>
-                )} */}
+                )}
               </div>
             </div>
           </div>
