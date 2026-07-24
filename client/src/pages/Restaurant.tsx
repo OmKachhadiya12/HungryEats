@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import type { IRestaurant } from "../types";
+import type { IMenuItem, IRestaurant } from "../types";
 import axios from "axios";
 import { restaurantService } from "../main";
 import AddRestaurant from "../components/AddRestaurant";
 import RestaurantProfile from "../components/RestaurantProfile";
+import MenuItems from "../components/MenuItem";
+import AddMenuItem from "../components/AddMenuItem";
 
 type SellerTab = "menu" | "add-item" | "sales";
 
@@ -41,6 +43,31 @@ const Restaurant = () => {
     fetchMyRestaurant();
   }, []);
 
+  const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
+
+  const fetchMenuItems = async (restaurantId: string) => {
+    try {
+      const { data } = await axios.get(
+        `${restaurantService}/api/item/all/${restaurantId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      setMenuItems(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (restaurant?._id) {
+      fetchMenuItems(restaurant._id);
+    }
+  }, [restaurant]);
+
   if (loading)
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -60,7 +87,7 @@ const Restaurant = () => {
         isSeller={true}
       />
 
-      {/* <RestaurantOrders restaurantId={restaurant._id} />
+      {/* <RestaurantOrders restaurantId={restaurant._id} /> */}
 
       <div className="rounded-xl bg-white shadow-sm">
         <div className="flex border-b">
@@ -96,7 +123,7 @@ const Restaurant = () => {
           )}
           {tab === "sales" && <p>Sales Page</p>}
         </div>
-      </div> */}
+      </div>
     </div>
   )
 }
