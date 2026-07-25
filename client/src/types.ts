@@ -66,7 +66,7 @@ export interface ICart {
   userId: string;
   restaurantId: string | IRestaurant;
   itemId: string | IMenuItem;
-  quauntity: number;
+  quantity: number;
   cretedAt: Date;
   updatedAt: Date;
 }
