@@ -103,6 +103,73 @@ const updateStatusRestaurant = TryCatch(async (req, res) => {
         restaurant,
     });
 });
-const updateReastaurant = TryCatch(async (req, res) => {
+const updateRestaurant = TryCatch(async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: "Please login." });
+    }
+    const { name, description } = req.body;
+    const restaurant = await Restaurant.findOneAndUpdate({ owner_d: req.user._id }, { name: name, description: description }, { new: true });
+    if (!restaurant) {
+        return res.status(404).json({
+            message: "Restaurant not found",
+        });
+    }
+    res.json({
+        message: "Restaurant Updated successfully",
+        restaurant,
+    });
 });
-export { addRestaurant, fetchMyrestaurant, updateStatusRestaurant };
+const getNearbyRestaurant = TryCatch(async (req, res) => {
+    const { latitude, longitude, radius = 5000, search = "" } = req.query;
+    if (!latitude || !longitude) {
+        return res.status(400).json({
+            message: "Latitude and Longitude are required."
+        });
+    }
+    const query = {
+        isVerified: true
+    };
+    if (search && typeof search == "string") {
+        query.name = {
+            $regex: search,
+            $options: "i"
+        };
+    }
+    const restaurants = await Restaurant.aggregate([
+        {
+            $geoNear: {
+                near: {
+                    type: "Point",
+                    coordinates: [Number(longitude), Number(latitude)],
+                },
+                distanceField: "distance",
+                maxDistance: Number(radius),
+                spherical: true,
+                query,
+            },
+        },
+        {
+            $sort: {
+                isOpen: -1,
+                distance: 1,
+            }
+        },
+        {
+            $addFields: {
+                distanceKm: {
+                    $round: [{ $divide: ["$distance", 1000] }, 2],
+                },
+            }
+        }
+    ]);
+    res.json({
+        success: true,
+        count: restaurants.length,
+        restaurants
+    });
+});
+const fetchSingleRestaurant = TryCatch(async (req, res) => {
+    const restaurant = await Restaurant.findById(req.params.id);
+    res.json(restaurant);
+});
+export { addRestaurant, fetchMyrestaurant, updateStatusRestaurant, updateRestaurant, getNearbyRestaurant, fetchSingleRestaurant };
