@@ -125,6 +125,11 @@ const updateStatusRestaurant = TryCatch(async (req:AuthenticatedRequest,res) => 
     }
 
     const restaurant = await Restaurant.findOneAndUpdate({ownerId: req.user._id},{isOpen: status},{new: true});
+    // const restaurant = await Restaurant.findOneAndUpdate(
+    //     { ownerId: req.user._id },
+    //     { isOpen: status },
+    //     { returnDocument: "after" }
+    // );
 
     if(!restaurant) {
         return res.status(404).json({
@@ -147,7 +152,12 @@ const updateRestaurant = TryCatch(async (req:AuthenticatedRequest,res) => {
 
     const {name, description} = req.body;
 
-    const restaurant = await Restaurant.findOneAndUpdate({owner_d: req.user._id},{name: name, description: description},{new: true});
+    const restaurant = await Restaurant.findOneAndUpdate({ownerId: req.user._id},{name: name, description: description},{new: true});
+    // const restaurant = await Restaurant.findOneAndUpdate(
+    //     { ownerId: req.user._id },
+    //     { name, description },
+    //     { returnDocument: "after" }
+    // );
 
     if(!restaurant) {
         return res.status(404).json({
