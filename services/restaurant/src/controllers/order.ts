@@ -16,7 +16,7 @@ const createOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
         })
     }
 
-    const { paymentMethod, addressId, distance } = req.body;
+    const { paymentMethod, addressId } = req.body;
 
     if(!addressId) {
         return res.status(400).json({
@@ -34,6 +34,27 @@ const createOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
             message: "Address not found."
         })
     }
+
+    const getDistanceKm = (
+        lat1: number,
+        lon1: number,
+        lat2: number,
+        lon2: number
+    ): number => {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+        const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return +(R * c).toFixed(2);
+    };
 
     const cartItems = await Cart.find({userId: user._id})
         .populate<{itemId: IMenuItem}>("itemId")
@@ -74,6 +95,13 @@ const createOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
             message: "Sorry this restaurant is closed for now",
         });
     }
+
+    const distance = getDistanceKm(
+        address.location.coordinates[1],
+        address.location.coordinates[0],
+        restaurant.autoLocation.coordinates[1],
+        restaurant.autoLocation.coordinates[0]
+    );
 
     let subTotal = 0;
 
