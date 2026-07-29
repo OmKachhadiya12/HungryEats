@@ -7,8 +7,11 @@ import cartRoutes from "./routes/cart.js";
 import addressRoutes from "./routes/address.js";
 import orderRoutes from "./routes/order.js";
 import cors from "cors";
+import { connectRabbitMQ } from "./config/rabbitmq.js";
 
 dotenv.config();
+
+connectRabbitMQ();
 
 const app = express();
 
