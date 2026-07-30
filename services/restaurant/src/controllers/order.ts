@@ -60,12 +60,6 @@ const createOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
         .populate<{itemId: IMenuItem}>("itemId")
         .populate<{resturantId: IRestaurant}>("restaurantId");
 
-    if(!cartItems) {
-        return res.status(404).json({
-            message: "Cart not found."
-        })
-    }    
-
     if(cartItems.length === 0) {
         return res.status(400).json({
             message: "Add items in your cart!!!"
@@ -80,7 +74,7 @@ const createOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
         });
     }
 
-    const restaurantId = firstCartItem.resturantId._id;
+    const restaurantId = firstCartItem.restaurantId._id;
 
     const restaurant = await Restaurant.findById(restaurantId);
 

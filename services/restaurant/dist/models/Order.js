@@ -49,7 +49,7 @@ const orderSchema = new Schema({
         required: true,
     },
     deliveryAddress: {
-        fromattedAddress: { type: String, required: true },
+        formattedAddress: { type: String, required: true },
         mobile: { type: Number, required: true },
         latitude: Number,
         longitude: Number,
