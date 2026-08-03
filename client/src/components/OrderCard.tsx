@@ -89,7 +89,7 @@ const OrderCard = ({ order, onStatusUpdate }: props) => {
       <div className="text-sm text-gray-600 space-y-1">
         {order.items.map((item, i) => (
           <p key={i}>
-            {item.name} x {item.quauntity}
+            {item.name} x {item.quantity}
           </p>
         ))}
       </div>

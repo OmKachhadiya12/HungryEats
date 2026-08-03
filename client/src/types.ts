@@ -86,7 +86,7 @@ export interface IOrder {
     itemId: string;
     name: string;
     price: number;
-    quauntity: number;
+    quantity: number;
   }[];
 
   subtotal: number;
