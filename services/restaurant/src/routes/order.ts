@@ -1,6 +1,6 @@
 import express from "express";
 import { isAuth, isSeller } from "../middlewares/isAuth.js";
-import { createOrder, fetchOrderforPayment, fetchRestaurantOrders, fetchSingleOrder, getMyOrders, updateOrderStatus } from "../controllers/order.js";
+import { assignedRiderToOrder, createOrder, fetchOrderforPayment, fetchRestaurantOrders, fetchSingleOrder, getMyOrders, geyCurrentOrdersForRider, updateOrderStatus, updateOrderStatusRider } from "../controllers/order.js";
 
 const router = express.Router();
 
@@ -11,5 +11,8 @@ router.post("/new",isAuth,createOrder);
 router.get("/payment/:id",fetchOrderforPayment);
 router.get("/restaurant/:restaurantId",isAuth,isSeller,fetchRestaurantOrders);
 router.put("/:orderId",isAuth,isSeller,updateOrderStatus);
+router.purge("/asign/rider",assignedRiderToOrder);
+router.get("/current/rider",geyCurrentOrdersForRider);
+router.put("/update/status/rider",updateOrderStatusRider)
 
 export default router;
