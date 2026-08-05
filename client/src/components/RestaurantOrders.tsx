@@ -91,19 +91,19 @@ const RestaurantOrders = ({restaurantId}: {restaurantId: string}) => {
     };
   }, [socket, audioUnlocked]);
 
-  // useEffect(() => {
-  //   if (!socket) return;
+  useEffect(() => {
+    if (!socket) return;
 
-  //   const onUpdateOrder = () => {
-  //     fetchOrders();
-  //   };
+    const onUpdateOrder = () => {
+      fetchOrders();
+    };
 
-  //   socket.on("order:rider_assigned", onUpdateOrder);
+    socket.on("order:rider_assigned", onUpdateOrder);
 
-  //   return () => {
-  //     socket.off("order:rider_assigned", onUpdateOrder);
-  //   };
-  // }, [socket]);
+    return () => {
+      socket.off("order:rider_assigned", onUpdateOrder);
+    };
+  }, [socket]);
 
   if (loading) {
     return <p className="text-gray-500">Loading Orders</p>;
