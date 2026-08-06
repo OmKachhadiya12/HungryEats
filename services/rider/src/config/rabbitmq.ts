@@ -7,6 +7,9 @@ export const connectRabbitMQ = async() => {
 
     channel = await connection.createChannel();
 
+    await channel.assertQueue(process.env.ORDER_READY_QUEUE,{
+        durable: true
+    })
     await channel.assertQueue(process.env.RIDER_QUEUE,{
         durable: true
     })

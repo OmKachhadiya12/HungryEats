@@ -5,6 +5,9 @@ import axios from "axios";
 import { riderService } from "../main";
 import toast from "react-hot-toast";
 import { BiUpload } from "react-icons/bi";
+import type { IOrder } from "../types";
+import audio from "../assets/faaah.mp3";
+import RiderOrderRequest from "../components/RiderOrderRequest";
 
 interface IRider {
   _id: string;
@@ -26,6 +29,55 @@ const RiderDashboard = () => {
 
     const [toggling, setToggling] = useState(false);
 
+    const [incomingOrders, setIncomingOrders] = useState<string[]>([]);
+    const [currentOrder, setCurrentOrder] = useState<IOrder | null>(null);
+
+    const [audioUnlocked, setAudioUnlocked] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+      audioRef.current = new Audio(audio);
+      audioRef.current.preload = "auto";
+    }, []);
+
+    const unlockAudio = async () => {
+      try {
+        if (!audioRef.current) return;
+        await audioRef.current.play();
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        setAudioUnlocked(true);
+        toast.success("Sound Enabled");
+      } catch (error) {
+        toast.error("Tap again to enable sound");
+      }
+    };
+
+    useEffect(() => {
+      if (!socket) return;
+
+      const onOrderAvailable = ({ orderId }: { orderId: string }) => {
+        setIncomingOrders((prev) =>
+          prev.includes(orderId) ? prev : [...prev, orderId]
+        );
+
+        if (audioUnlocked && audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(() => {});
+        }
+
+        setTimeout(() => {
+          setIncomingOrders((prev) => prev.filter((id) => id !== orderId));
+        }, 10000);
+      };
+
+      socket.on("order:available", onOrderAvailable);
+
+      return () => {
+        socket.off("order:available", onOrderAvailable);
+      };
+    }, [socket, audioUnlocked]);
+
     const fetchProfile = async () => {
     try {
       const { data } = await axios.get(`${riderService}/api/rider/myprofile`, {
@@ -46,6 +98,28 @@ const RiderDashboard = () => {
         if (user?.role === "rider") fetchProfile();
         else setLoading(false);
     }, [user]);
+
+    const fetchCurrentOrder = async () => {
+      try {
+        const { data } = await axios.get(
+          `${riderService}/api/rider/order/current`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        setCurrentOrder(data.order);
+      } catch (error) {
+        console.log(error);
+        setCurrentOrder(null);
+      }
+    };
+
+    useEffect(() => {
+      fetchCurrentOrder();
+    }, []);
 
     const toggleAvailiblity = async () => {
         if (!navigator.geolocation) {
@@ -250,7 +324,7 @@ const RiderDashboard = () => {
         </div>
       </div>
 
-      {/* {!audioUnlocked && (
+      {!audioUnlocked && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🔔</span>
@@ -289,7 +363,7 @@ const RiderDashboard = () => {
         </div>
       )}
 
-      {currentOrder && (
+      {/* {currentOrder && (
         <div className="mx-auto max-w-md px-4 space-y-4">
           <RiderCurrentOrder
             order={currentOrder}
