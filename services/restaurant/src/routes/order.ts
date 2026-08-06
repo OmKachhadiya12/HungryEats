@@ -11,7 +11,7 @@ router.post("/new",isAuth,createOrder);
 router.get("/payment/:id",fetchOrderforPayment);
 router.get("/restaurant/:restaurantId",isAuth,isSeller,fetchRestaurantOrders);
 router.put("/:orderId",isAuth,isSeller,updateOrderStatus);
-router.purge("/asign/rider",assignedRiderToOrder);
+router.put("/asign/rider",assignedRiderToOrder);
 router.get("/current/rider",geyCurrentOrdersForRider);
 router.put("/update/status/rider",updateOrderStatusRider)
 
