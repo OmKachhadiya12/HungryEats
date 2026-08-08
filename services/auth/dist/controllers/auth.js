@@ -31,7 +31,7 @@ const loginUser = TryCatch(async (req, res) => {
         user
     });
 });
-const allowedRoles = ["customer", "seller", "driver"];
+const allowedRoles = ["customer", "seller", "rider"];
 const addUserRole = TryCatch(async (req, res) => {
     if (!req.user?._id) {
         res.status(401).json({

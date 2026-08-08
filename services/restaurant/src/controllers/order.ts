@@ -205,7 +205,7 @@ const fetchRestaurantOrders = TryCatch(async (req:AuthenticatedRequest,res) => {
         })
     } 
 
-    const restaurantId = req.params;
+    const { restaurantId } = req.params;
 
     if(!restaurantId) {
         return res.status(400).json({
@@ -436,9 +436,9 @@ const geyCurrentOrdersForRider = TryCatch(async (req,res) => {
         });
     }
 
-    const riderId  = req.query;
+    const { riderId }  = req.query;
 
-    if(!riderId) {
+    if (!riderId || typeof riderId !== "string") {
         return res.status(400).json({
             message: "RiderId is required.",
         });

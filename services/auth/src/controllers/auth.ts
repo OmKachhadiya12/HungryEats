@@ -43,7 +43,7 @@ const loginUser = TryCatch(async (req,res) => {
     });
 })
 
-const allowedRoles = ["customer","seller","driver"] as const;
+const allowedRoles = ["customer","seller","rider"] as const;
 type Role = (typeof allowedRoles)[number];
 
 const addUserRole = TryCatch(async (req:AuthenticatedRequest,res) => {

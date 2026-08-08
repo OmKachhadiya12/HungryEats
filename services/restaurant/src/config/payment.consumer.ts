@@ -13,7 +13,7 @@ export const startPaymentConsumer = async () => {
         try {
             const event = JSON.parse(msg.content.toString());
 
-            if(event.type !== "PAYMNET_SUCCESS") {
+            if(event.type !== "PAYMENT_SUCCESS") {
                 channel.ack(msg);
                 return;
             }
@@ -46,7 +46,7 @@ export const startPaymentConsumer = async () => {
             await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`,{
                 event: "order:new",
                 room:`restaurant:${order.restaurantId}`,
-                playload: {
+                payload: {
                     orderId: order._id
                 }
             },{
