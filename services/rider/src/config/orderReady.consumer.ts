@@ -22,7 +22,7 @@ export const startOrderReadyConsumer = async () => {
 
             console.log("event type", event.type);
 
-            if(event.type !== "ORDER_READY_FOR_rider") {
+            if(event.type !== "ORDER_READY_FOR_RIDER") {
                 console.log("skipping non-order-ready-for-rider event");
                 channel.ack(msg);
                 return;
@@ -59,7 +59,7 @@ export const startOrderReadyConsumer = async () => {
                     await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`,{
                         event: "order:available",
                         room: `user:${rider.userId}`,
-                        playload: {
+                        payload: {
                             orderId,
                             restaurantId
                         }

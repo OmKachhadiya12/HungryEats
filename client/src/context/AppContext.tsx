@@ -20,7 +20,6 @@ export const AppProvider = ({children}: AppProviderProps) => {
     const [user, setUser] = useState<User | null>(null);
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] = useState(true);
-
     const [location, setLocation] = useState<LocationData | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false);
     const [city, setCity] = useState("Fecthing Location...");
@@ -107,6 +106,7 @@ export const AppProvider = ({children}: AppProviderProps) => {
           data.address.city ||
             data.address.town ||
             data.address.village ||
+            data.address.state_district ||
             "Your Location"
         );
         setLoadingLocation(false);

@@ -186,7 +186,7 @@ const fetchMyCurrentOrder = TryCatch(async (req, res) => {
         return res.status(404).json({ message: "rider not found" });
     }
     try {
-        const { data } = await axios.get(`${process.env.RESTAURANT_SERVICE}/api/order/current/rider?riderId:${rider._id}`, {
+        const { data } = await axios.get(`${process.env.RESTAURANT_SERVICE}/api/order/current/rider?riderId=${rider._id}`, {
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
             }

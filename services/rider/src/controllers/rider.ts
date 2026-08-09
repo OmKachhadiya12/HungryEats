@@ -247,7 +247,7 @@ const fetchMyCurrentOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
 
     try {
 
-        const { data } = await axios.get(`${process.env.RESTAURANT_SERVICE}/api/order/current/rider?riderId:${rider._id}`,{
+        const { data } = await axios.get(`${process.env.RESTAURANT_SERVICE}/api/order/current/rider?riderId=${rider._id}`,{
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
             }

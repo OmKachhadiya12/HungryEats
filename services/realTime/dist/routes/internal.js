@@ -7,7 +7,7 @@ router.post("/emit", (req, res) => {
             message: "Forbidden",
         });
     }
-    const { event, room, playload } = req.body;
+    const { event, room, payload } = req.body;
     if (!event || !room) {
         return res.status(400).json({
             message: "Event and Room are required",
@@ -15,7 +15,7 @@ router.post("/emit", (req, res) => {
     }
     const io = getIO();
     console.log(`📶 Emitting event ${event} to room ${room}`);
-    io.to(room).emit(event, playload ?? {});
+    io.to(room).emit(event, payload ?? {});
     return res.json({
         success: true
     });

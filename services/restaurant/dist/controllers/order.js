@@ -207,7 +207,7 @@ const updateOrderStatus = TryCatch(async (req, res) => {
     await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
         event: "order-update",
         room: `user:${order.userId}`,
-        playload: {
+        payload: {
             orderId: order._id,
             status: order.status
         }
@@ -296,7 +296,7 @@ const assignedRiderToOrder = TryCatch(async (req, res) => {
     await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
         event: "order:rider_assigned",
         room: `user:${order.userId}`,
-        playload: order
+        payload: order
     }, {
         headers: {
             "x-internal-key": process.env.INTERNAL_SERVICE_KEY
@@ -305,7 +305,7 @@ const assignedRiderToOrder = TryCatch(async (req, res) => {
     await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
         event: "order:rider_assigned",
         room: `restaurant:${order.restaurantId}`,
-        playload: order
+        payload: order
     }, {
         headers: {
             "x-internal-key": process.env.INTERNAL_SERVICE_KEY
@@ -359,7 +359,7 @@ const updateOrderStatusRider = TryCatch(async (req, res) => {
         await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
             event: "order:rider_assigned",
             room: `user:${order.userId}`,
-            playload: order
+            payload: order
         }, {
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY
@@ -368,7 +368,7 @@ const updateOrderStatusRider = TryCatch(async (req, res) => {
         await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
             event: "order:rider_assigned",
             room: `restaurant:${order.restaurantId}`,
-            playload: order
+            payload: order
         }, {
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY
@@ -384,7 +384,7 @@ const updateOrderStatusRider = TryCatch(async (req, res) => {
         await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
             event: "order:rider_assigned",
             room: `user:${order.userId}`,
-            playload: order
+            payload: order
         }, {
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY
@@ -393,7 +393,7 @@ const updateOrderStatusRider = TryCatch(async (req, res) => {
         await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
             event: "order:rider_assigned",
             room: `restaurant:${order.restaurantId}`,
-            playload: order
+            payload: order
         }, {
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY

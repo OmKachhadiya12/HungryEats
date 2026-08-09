@@ -11,7 +11,7 @@ router.post("/emit",(req,res) => {
         });
     }
 
-    const { event, room, playload } = req.body;
+    const { event, room, payload } = req.body;
 
     if(!event || !room) {
         return res.status(400).json({
@@ -23,7 +23,7 @@ router.post("/emit",(req,res) => {
 
     console.log(`📶 Emitting event ${event} to room ${room}`);
 
-    io.to(room).emit(event, playload ?? {});
+    io.to(room).emit(event, payload ?? {});
 
     return res.json({
         success: true
