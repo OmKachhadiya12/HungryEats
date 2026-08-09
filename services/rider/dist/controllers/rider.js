@@ -134,7 +134,7 @@ const acceptOrder = TryCatch(async (req, res) => {
     }
     const rider = await Rider.findOne({
         userId: riderUserId,
-        isAvaliable: true
+        isAvailable: true
     });
     if (!rider) {
         return res.status(404).json({
@@ -218,7 +218,7 @@ const updateOrderStatus = TryCatch(async (req, res) => {
     }
     const { orderId } = req.params;
     try {
-        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/update/status/rider}`, {
+        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/update/status/rider`, {
             orderId
         }, {
             headers: {

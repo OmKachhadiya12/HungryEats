@@ -27,7 +27,7 @@ export interface IOrder extends Document {
     deliveryAddress: {
         formattedAddress: string;
         mobile: number;
-        latitiude: number;
+        latitude: number;
         longitude: number;
     }
 
@@ -89,7 +89,7 @@ const orderSchema = new Schema<IOrder>({
         itemId: String,
         name: String,
         price: Number,
-        quauntity: Number,
+        quantity: Number,
       },
     ],
 

@@ -37,7 +37,7 @@ const orderSchema = new Schema({
             itemId: String,
             name: String,
             price: Number,
-            quauntity: Number,
+            quantity: Number,
         },
     ],
     subTotal: Number,

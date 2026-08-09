@@ -115,7 +115,7 @@ const OrderPage = () => {
       <div className="rounded-xl bg-white p-4 shadow-sm space-y-1">
         <h2 className="font-semibold">Delivery Address</h2>
         <p className="text-sm text-gray-600">
-          {order.deliveryAddress.fromattedAddress}
+          {order.deliveryAddress.formattedAddress}
         </p>
         <p className="text-sm text-gray-600">
           Mobile: {order.deliveryAddress.mobile}
@@ -124,13 +124,13 @@ const OrderPage = () => {
 
       <div className="rounded-xl bg-white p-4 shadow-sm space-y-2">
         <div className="flex justify-between text-sm">
-          <span>SubTotal</span> <span>₹{order.subtotal}</span>
+          <span>SubTotal</span> <span>₹{order.subTotal}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span>Delivery Fee</span> <span>₹{order.deliveryFee}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span>PlatForm Fee</span> <span>₹{order.platfromFee}</span>
+          <span>PlatForm Fee</span> <span>₹{order.platformFee}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span>Total</span> <span>₹{order.totalAmount}</span>

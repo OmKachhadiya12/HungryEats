@@ -126,7 +126,7 @@ const createOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
 
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
-    const [longitude, latitiude] = address.location.coordinates;
+    const [longitude, latitude] = address.location.coordinates;
 
     const riderAmount = Math.ceil(distance) * 31;
 
@@ -146,7 +146,7 @@ const createOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
         deliveryAddress: {
             formattedAddress: address.formattedAddress,
             mobile: address.mobile,
-            latitiude,
+            latitude,
             longitude
         },
         paymentMethod,
@@ -298,7 +298,7 @@ const updateOrderStatus = TryCatch(async (req:AuthenticatedRequest,res) => {
         }
     )
 
-    if(status === "ready_for_driver") {
+    if(status === "ready_for_rider") {
         console.log("Publishing the order_ready event to the rider to order -> ", order._id);
 
         await publishEvent("ORDER_READY_FOR_RIDER",{
@@ -358,9 +358,7 @@ const fetchSingleOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
         })
     }
 
-    res.json({
-        order
-    })
+    res.json(order)
     
 })
 
@@ -443,7 +441,6 @@ const geyCurrentOrdersForRider = TryCatch(async (req,res) => {
             message: "RiderId is required.",
         });
     }
-
     const order = await Order.findOne({
         riderId,
         status: {$ne: "delivered"}
@@ -451,7 +448,7 @@ const geyCurrentOrdersForRider = TryCatch(async (req,res) => {
     
     if(!order) {
         return res.status(404).json({
-            message: "Order not found.",
+            message: "Order not found....",
         });
     }
 

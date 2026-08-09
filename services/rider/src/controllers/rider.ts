@@ -180,7 +180,7 @@ const acceptOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
 
     const rider = await Rider.findOne({
         userId: riderUserId,
-        isAvaliable: true
+        isAvailable: true
     })
 
     if(!rider) {
@@ -246,7 +246,6 @@ const fetchMyCurrentOrder = TryCatch(async (req:AuthenticatedRequest,res) => {
     }
 
     try {
-
         const { data } = await axios.get(`${process.env.RESTAURANT_SERVICE}/api/order/current/rider?riderId=${rider._id}`,{
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
@@ -290,7 +289,7 @@ const updateOrderStatus = TryCatch(async (req:AuthenticatedRequest,res) => {
 
     try {
 
-        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/update/status/rider}`,{
+        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/update/status/rider`,{
             orderId
         },{
             headers: {

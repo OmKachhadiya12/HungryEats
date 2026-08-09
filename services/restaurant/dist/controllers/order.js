@@ -85,7 +85,7 @@ const createOrder = TryCatch(async (req, res) => {
     const platformFee = 21;
     const totalAmount = subTotal + deliveryFee + platformFee;
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-    const [longitude, latitiude] = address.location.coordinates;
+    const [longitude, latitude] = address.location.coordinates;
     const riderAmount = Math.ceil(distance) * 31;
     const order = await Order.create({
         userId: user._id.toString(),
@@ -103,7 +103,7 @@ const createOrder = TryCatch(async (req, res) => {
         deliveryAddress: {
             formattedAddress: address.formattedAddress,
             mobile: address.mobile,
-            latitiude,
+            latitude,
             longitude
         },
         paymentMethod,
@@ -216,7 +216,7 @@ const updateOrderStatus = TryCatch(async (req, res) => {
             "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
         }
     });
-    if (status === "ready_for_driver") {
+    if (status === "ready_for_rider") {
         console.log("Publishing the order_ready event to the rider to order -> ", order._id);
         await publishEvent("ORDER_READY_FOR_RIDER", {
             orderId: order._id.toString(),
@@ -261,9 +261,7 @@ const fetchSingleOrder = TryCatch(async (req, res) => {
             message: "You are not allowed to see the other's order."
         });
     }
-    res.json({
-        order
-    });
+    res.json(order);
 });
 const assignedRiderToOrder = TryCatch(async (req, res) => {
     if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
@@ -335,7 +333,7 @@ const geyCurrentOrdersForRider = TryCatch(async (req, res) => {
     }).populate("restaurantId");
     if (!order) {
         return res.status(404).json({
-            message: "Order not found.",
+            message: "Order not found....",
         });
     }
     res.json(order);

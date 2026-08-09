@@ -89,15 +89,15 @@ export interface IOrder {
     quantity: number;
   }[];
 
-  subtotal: number;
+  subTotal: number;
   deliveryFee: number;
-  platfromFee: number;
+  platformFee: number;
   totalAmount: number;
 
   addressId: string;
 
   deliveryAddress: {
-    fromattedAddress: string;
+    formattedAddress: string;
     mobile: number;
     latitude: number;
     longitude: number;
