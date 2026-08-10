@@ -537,4 +537,115 @@ const updateOrderStatusRider = TryCatch(async (req,res) => {
     
 })
 
-export { createOrder, fetchOrderforPayment, fetchRestaurantOrders, updateOrderStatus, getMyOrders, fetchSingleOrder, assignedRiderToOrder, geyCurrentOrdersForRider, updateOrderStatusRider };
+const fetchRestaurantSales = TryCatch(
+  async (req: AuthenticatedRequest, res) => {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Unauthorized.",
+      });
+    }
+
+    const { restaurantId } = req.params;
+
+    if (!restaurantId) {
+      return res.status(400).json({
+        message: "Restaurant ID is required.",
+      });
+    }
+
+    // Get date range from query
+    const range = req.query.range as string;
+
+    let days = 7;
+
+    if (range === "30") {
+      days = 30;
+    } else if (range === "90") {
+      days = 90;
+    }
+
+    const endDate = new Date();
+    const startDate = new Date();
+
+    startDate.setDate(startDate.getDate() - days);
+
+    // Fetch only completed and paid orders
+    const orders = await Order.find({
+      restaurantId,
+      paymentStatus: "paid",
+      status: "delivered",
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    }).sort({ createdAt: -1 });
+
+    // -----------------------------
+    // Total statistics
+    // -----------------------------
+
+    const totalOrders = orders.length;
+
+    const totalSales = orders.reduce(
+      (sum, order) => sum + (order.subTotal || 0),
+      0
+    );
+
+    const averageOrderValue =
+      totalOrders > 0 ? totalSales / totalOrders : 0;
+
+    // -----------------------------
+    // Daily sales
+    // -----------------------------
+
+    const dailySalesMap: Record<
+      string,
+      {
+        date: string;
+        sales: number;
+        orders: number;
+      }
+    > = {};
+
+    orders.forEach((order) => {
+      const date = new Date(order.createdAt)
+        .toISOString()
+        .split("T")[0]!;
+
+      if (!dailySalesMap[date]) {
+        dailySalesMap[date] = {
+          date,
+          sales: 0,
+          orders: 0,
+        };
+      }
+
+      dailySalesMap[date].sales += order.subTotal || 0;
+      dailySalesMap[date].orders += 1;
+    });
+
+    const dailySales = Object.values(dailySalesMap).sort(
+      (a, b) =>
+        new Date(a.date).getTime() -
+        new Date(b.date).getTime()
+    );
+
+    return res.json({
+      success: true,
+
+      summary: {
+        totalSales,
+        totalOrders,
+        averageOrderValue,
+      },
+
+      dailySales,
+
+      orders,
+    });
+  }
+);
+
+export { createOrder, fetchOrderforPayment, fetchRestaurantOrders, updateOrderStatus, getMyOrders, fetchSingleOrder, assignedRiderToOrder, geyCurrentOrdersForRider, updateOrderStatusRider, fetchRestaurantSales };
