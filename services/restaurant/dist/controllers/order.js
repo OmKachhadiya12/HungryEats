@@ -474,4 +474,60 @@ const fetchRestaurantSales = TryCatch(async (req, res) => {
         orders,
     });
 });
-export { createOrder, fetchOrderforPayment, fetchRestaurantOrders, updateOrderStatus, getMyOrders, fetchSingleOrder, assignedRiderToOrder, geyCurrentOrdersForRider, updateOrderStatusRider, fetchRestaurantSales };
+const fetchRiderOrderHistory = TryCatch(async (req, res) => {
+    // This endpoint is only for internal service communication
+    if (req.headers["x-internal-key"] !==
+        process.env.INTERNAL_SERVICE_KEY) {
+        return res.status(403).json({
+            message: "Forbidden.",
+        });
+    }
+    const { riderId } = req.params;
+    if (!riderId) {
+        return res.status(400).json({
+            message: "Rider ID is required.",
+        });
+    }
+    const range = req.query.range;
+    let days = 30;
+    if (range === "7") {
+        days = 7;
+    }
+    else if (range === "30") {
+        days = 30;
+    }
+    else if (range === "90") {
+        days = 90;
+    }
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - (days - 1));
+    startDate.setHours(0, 0, 0, 0);
+    const orders = await Order.find({
+        riderId,
+        status: "delivered",
+        paymentStatus: "paid",
+        createdAt: {
+            $gte: startDate,
+            $lte: endDate,
+        },
+    }).sort({
+        createdAt: -1,
+    });
+    const totalRides = orders.length;
+    const totalEarnings = orders.reduce((sum, order) => sum + (order.riderAmount || 0), 0);
+    const averageEarning = totalRides > 0
+        ? totalEarnings / totalRides
+        : 0;
+    return res.json({
+        success: true,
+        summary: {
+            totalRides,
+            totalEarnings,
+            averageEarning,
+        },
+        orders,
+    });
+});
+export { createOrder, fetchOrderforPayment, fetchRestaurantOrders, updateOrderStatus, getMyOrders, fetchSingleOrder, assignedRiderToOrder, geyCurrentOrdersForRider, updateOrderStatusRider, fetchRestaurantSales, fetchRiderOrderHistory };

@@ -1,6 +1,6 @@
 import express from "express";
 import { isAuth, isSeller } from "../middlewares/isAuth.js";
-import { assignedRiderToOrder, createOrder, fetchOrderforPayment, fetchRestaurantOrders, fetchRestaurantSales, fetchSingleOrder, getMyOrders, geyCurrentOrdersForRider, updateOrderStatus, updateOrderStatusRider } from "../controllers/order.js";
+import { assignedRiderToOrder, createOrder, fetchOrderforPayment, fetchRiderOrderHistory, fetchRestaurantOrders, fetchRestaurantSales, fetchSingleOrder, getMyOrders, geyCurrentOrdersForRider, updateOrderStatus, updateOrderStatusRider } from "../controllers/order.js";
 
 const router = express.Router();
 
@@ -14,6 +14,7 @@ router.get("/restaurant/:restaurantId/sales",isAuth,isSeller,fetchRestaurantSale
 router.put("/:orderId",isAuth,isSeller,updateOrderStatus);
 router.put("/assign/rider",assignedRiderToOrder);
 router.get("/current/rider",geyCurrentOrdersForRider);
+router.get("/rider/:riderId/history", fetchRiderOrderHistory);
 router.put("/update/status/rider",updateOrderStatusRider)
 
 export default router;

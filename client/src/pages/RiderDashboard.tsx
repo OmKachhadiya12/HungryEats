@@ -10,6 +10,7 @@ import audio from "../assets/faaah.mp3";
 import RiderOrderRequest from "../components/RiderOrderRequest";
 import RiderCurrentOrder from "../components/RiderCurrentOrder";
 import RiderOrderMap from "../components/RiderOrderMap";
+import RiderHistory from "../components/Riderhistory";
 
 interface IRider {
   _id: string;
@@ -374,6 +375,9 @@ const RiderDashboard = () => {
           <RiderOrderMap order={currentOrder} />
         </div>
       )}
+      <div className="mx-auto max-w-3xl px-4 pb-6">
+        <RiderHistory />
+      </div>
     </div>
   )
 }

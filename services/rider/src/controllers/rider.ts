@@ -312,4 +312,54 @@ const updateOrderStatus = TryCatch(async (req:AuthenticatedRequest,res) => {
     
 })
 
-export { addRiderProfile, fetchMyProfile, toogleRiderAvailability, acceptOrder, fetchMyCurrentOrder, updateOrderStatus }
+const fetchRiderHistory = TryCatch(
+  async (req: AuthenticatedRequest, res) => {
+    const riderUserId = req.user?._id;
+
+    if (!riderUserId) {
+      return res.status(401).json({
+        message: "Please login.",
+      });
+    }
+
+    const rider = await Rider.findOne({
+      userId: riderUserId,
+      isVerified: true,
+    });
+
+    if (!rider) {
+      return res.status(404).json({
+        message: "Rider not found.",
+      });
+    }
+
+    const range = req.query.range || "30";
+
+    try {
+      const { data } = await axios.get(
+        `${process.env.RESTAURANT_SERVICE}/api/order/rider/${rider._id}/history`,
+        {
+          params: {
+            range,
+          },
+          headers: {
+            "x-internal-key":
+              process.env.INTERNAL_SERVICE_KEY,
+          },
+        }
+      );
+
+      return res.json(data);
+    } catch (error: any) {
+      console.log(error);
+
+      return res.status(500).json({
+        message:
+          error.response?.data?.message ||
+          "Failed to fetch rider history.",
+      });
+    }
+  }
+);
+
+export { addRiderProfile, fetchMyProfile, toogleRiderAvailability, acceptOrder, fetchMyCurrentOrder, updateOrderStatus, fetchRiderHistory }
