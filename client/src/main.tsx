@@ -7,12 +7,12 @@ import { AppProvider } from './context/AppContext.tsx';
 import { SocketProvider } from './context/SocketContext.tsx';
 import "leaflet/dist/leaflet.css"
 
-export const authService = "http://localhost:1212";
-export const restaurantService = "http://localhost:1213";
-export const utilsService = "http://localhost:1214";
-export const realTimeService = "http://localhost:1215";
-export const riderService = "http://localhost:1216";
-export const adminService = "http://localhost:1217";
+export const authService = "https://hungryeat-auth.onrender.com";
+export const restaurantService = "https://hungryeat-restaurant.onrender.com";
+export const utilsService = "https://hungryeat-utils.onrender.com";
+export const realTimeService = "https://hungryeat-realtime.onrender.com";
+export const riderService = "https://hungryeat-rider.onrender.com";
+export const adminService = "https://hungryeat-admin.onrender.com";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
