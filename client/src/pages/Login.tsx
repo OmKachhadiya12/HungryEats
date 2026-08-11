@@ -34,10 +34,18 @@ const Login = () => {
   };
 
   const googleLogin = useGoogleLogin({
-    onSuccess: responseGoogle,
-    onError: responseGoogle,
-    flow: "auth-code",
-  });
+  flow: "auth-code",
+
+  onSuccess: responseGoogle,
+
+  onError: (error) => {
+    console.log("OAuth Error:", error);
+  },
+
+  onNonOAuthError: (error) => {
+    console.log("Non OAuth Error:", error);
+  },
+});
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4">
