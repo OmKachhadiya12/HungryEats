@@ -40,7 +40,7 @@ const RiderCurrentOrder = ({ order, onStatusUpdate }: Props) => {
         </p>
         <p>
           <b>Drop:</b>
-          {order.deliveryAddress.fromattedAddress}
+          {order.deliveryAddress.formattedAddress}
         </p>
         <p>
           <b>Total:</b>₹{order.totalAmount}
