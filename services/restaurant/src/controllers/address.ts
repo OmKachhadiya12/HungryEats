@@ -67,6 +67,8 @@ const deleteAddress = TryCatch(async (req:AuthenticatedRequest,res) => {
             message: "Address not found."
         })
     }
+
+    await address.deleteOne();
     
     res.json({
         message: "Address deleted successfully."
